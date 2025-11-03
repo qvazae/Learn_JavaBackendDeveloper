@@ -1,5 +1,1 @@
-Ссылка для создания PR (ветка fix → base main):
-https://github.com/qvazae/Learn_JavaBackendDeveloper/pull/new/fix
-
-После создания PR вставьте сюда итоговую ссылку на PR:
-<вставьте ссылку формата https://github.com/qvazae/Learn_JavaBackendDeveloper/pull/NUMBER>
+Ссылка: 
