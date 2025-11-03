@@ -4,8 +4,12 @@ on:
   push:
     paths:
       - '**/*.puml'
+      - '**/README.md'
       - '.github/workflows/plantuml.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -13,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -32,10 +38,10 @@ jobs:
       - name: Render UML to SVG
         run: |
           java -Djava.awt.headless=true -jar plantuml.jar -tsvg "1.2 Системы контроля версий. Продвинутое ООП/transport_uml.puml"
+          ls -la "1.2 Системы контроля версий. Продвинутое ООП" || true
 
       - name: Commit generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(uml): auto-generate transport_uml.svg"
-          file_pattern: "1.2 Системы контроля версий. Продвинутое ООП/transport_uml.svg"
-
+          file_pattern: "**/transport_uml.svg"
