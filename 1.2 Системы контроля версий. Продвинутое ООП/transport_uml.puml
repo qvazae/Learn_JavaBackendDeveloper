@@ -1,0 +1,71 @@
+@startuml
+title Иерархия транспорта (Sealed + Enum)
+
+interface EnginePowered {
+  +Engine getEngine()
+  +startEngine()
+  +stopEngine()
+}
+
+enum FuelType {
+  GASOLINE
+  DIESEL
+  JET_FUEL
+  ELECTRIC
+}
+
+abstract class Transport <<sealed>> {
+  - model: String
+  - capacity: int
+  + getMaxSpeed(): double
+  + move(): void
+  + basicInfo(): String
+}
+
+abstract class Engine <<sealed>> {
+  - powerHP: int
+  - running: boolean
+  + start(): void
+  + stop(): void
+  + isRunning(): boolean
+  + getPowerHP(): int
+}
+
+class CombustionEngine <<final>> {
+  - fuelType: FuelType
+  - displacementCC: int
+}
+
+class ElectricMotor <<final>> {
+  - batteryKWh: double
+}
+
+class Car <<final>>
+class Airplane <<final>>
+class Ship <<final>>
+class Bicycle <<final>>
+
+Transport <|-- Car
+Transport <|-- Airplane
+Transport <|-- Ship
+Transport <|-- Bicycle
+
+Engine <|-- CombustionEngine
+Engine <|-- ElectricMotor
+
+CombustionEngine --> FuelType
+Car ..|> EnginePowered
+Airplane ..|> EnginePowered
+Ship ..|> EnginePowered
+
+Car --> CombustionEngine
+Airplane --> CombustionEngine
+Ship --> CombustionEngine
+
+note right of Bicycle
+  Велосипед не реализует EnginePowered,
+  так как у него нет двигателя
+end note
+
+@enduml
+

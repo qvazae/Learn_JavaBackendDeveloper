@@ -1,1 +1,3 @@
 .vscode/
+# Ignore accidental device file name on Windows
+CON

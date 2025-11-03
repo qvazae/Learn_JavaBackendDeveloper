@@ -1,0 +1,41 @@
+name: Render PlantUML diagrams
+
+on:
+  push:
+    paths:
+      - '**/*.puml'
+      - '.github/workflows/plantuml.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Download PlantUML
+        run: |
+          curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.6/plantuml-1.2024.6.jar
+
+      - name: Render UML to SVG
+        run: |
+          java -Djava.awt.headless=true -jar plantuml.jar -tsvg "1.2 Системы контроля версий. Продвинутое ООП/transport_uml.puml"
+
+      - name: Commit generated SVG
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(uml): auto-generate transport_uml.svg"
+          file_pattern: "1.2 Системы контроля версий. Продвинутое ООП/transport_uml.svg"
+
