@@ -1,5 +1,5 @@
 @startuml
-title Transport hierarchy (Sealed + Enum)
+title Иерархия транспорта (Sealed + Enum)
 
 interface EnginePowered {
   +Engine getEngine()
@@ -66,4 +66,3 @@ Airplane --> CombustionEngine
 Ship --> CombustionEngine
 
 @enduml
-

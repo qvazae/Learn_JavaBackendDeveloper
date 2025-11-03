@@ -16,9 +16,6 @@
 | Числа — только положительные/валидные; диапазоны — через явный выбор; строки — без пустых; поддерживается точка/запятая для десятичных. | `Car` → `CombustionEngine` (GASOLINE/DIESEL); `Airplane` → `CombustionEngine` (JET_FUEL); `Ship` → `CombustionEngine` (DIESEL); `ElectricCar` → `ElectricMotor`; `Bicycle` — без двигателя. | Виды транспорта — `final`; базовые классы — `sealed`; поля — неизменяемые; `Engine` управляет `running` через `start()/stop()`; обязательные параметры проверяются. |
 
 # Диаграмма
-
-Диаграмма строится из `transport_uml.puml`. Изображение `SVG` добавляется автоматически после изменений.
-
 ![Диаграмма классов](./transport_uml.svg)
 
 <!-- prettier-ignore-end -->
