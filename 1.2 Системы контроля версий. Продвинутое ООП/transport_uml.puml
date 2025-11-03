@@ -1,5 +1,5 @@
 @startuml
-title Иерархия транспорта (Sealed + Enum)
+title Transport hierarchy (Sealed + Enum)
 
 interface EnginePowered {
   +Engine getEngine()
@@ -65,9 +65,5 @@ ElectricCar --> ElectricMotor
 Airplane --> CombustionEngine
 Ship --> CombustionEngine
 
-note left of Bicycle
-  Велосипед не реализует EnginePowered,
-  так как у него нет двигателя
-end note
-
 @enduml
+
