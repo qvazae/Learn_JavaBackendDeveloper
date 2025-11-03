@@ -4,18 +4,13 @@ import java.util.*;
  * Вариант 1 — Архитектура (SOLID + Generics + простые паттерны).
  *
  * Что изменено по сравнению с предыдущим решением (1.2):
- * - Single Responsibility: доменная модель отделена от деталей ввода/вывода;
- *   каждая сущность отвечает за одно: транспорт хранит состояние, стратегия — за движение,
- *   фабрика — за создание, репозиторий — за хранение.
- * - Open/Closed: для добавления нового транспорта/способа движения не требуется менять
- *   существующий код — достаточно добавить новую реализацию стратегии/класса транспорта.
+ * - Single Responsibility: доменная модель отделена от ввода/вывода; сущности узкоспециализированы.
+ * - Open/Closed: для нового транспорта/движения достаточно добавить класс, без правки существующего кода.
  * - Liskov Substitution: все транспорты взаимозаменяемы по интерфейсу Transport.
- * - Interface Segregation: небольшие узкоспециализированные интерфейсы (Transport, HasEngine,
- *   MovementStrategy, Repository, Factory).
- * - Dependency Inversion: Transport не знает конкретных реализаций движка или движения —
- *   получает абстракции через конструктор (стратегии/двигатели внедряются извне).
- * - Generics: Strategy, Repository, Factory параметризованы типами.
- * - Паттерны: Strategy (движение), Factory (создание транспорта), Repository (хранилище).
+ * - Interface Segregation: небольшие интерфейсы (Transport, HasEngine, MovementStrategy, Repository, Factory).
+ * - Dependency Inversion: Transport зависит от абстракций (стратегий/двигателей), внедряемых извне.
+ * - Generics: стратегии, репозитории, фабрики параметризованы типами.
+ * - Паттерны: Strategy (движение), Factory (создание), Repository (хранилище).
  */
 
 public class variant1 {
@@ -70,7 +65,7 @@ interface HasEngine<E extends Engine> {
 }
 
 /**
- * Само-типизированная базовая модель транспорта, использующая стратегию движения.
+ * Самотипизированная базовая модель транспорта, использующая стратегию движения.
  */
 abstract class AbstractTransport<T extends AbstractTransport<T>> implements Transport {
     private final String model;
@@ -78,8 +73,8 @@ abstract class AbstractTransport<T extends AbstractTransport<T>> implements Tran
     private final MovementStrategy<T> movement;
 
     protected AbstractTransport(String model, int capacity, MovementStrategy<T> movement) {
-        if (model == null || model.isBlank()) throw new IllegalArgumentException("model is blank");
-        if (capacity < 0) throw new IllegalArgumentException("capacity must be >= 0");
+        if (model == null || model.isBlank()) throw new IllegalArgumentException("модель не задана");
+        if (capacity < 0) throw new IllegalArgumentException("вместимость должна быть ≥ 0");
         this.model = model;
         this.capacity = capacity;
         this.movement = Objects.requireNonNull(movement);
@@ -97,7 +92,7 @@ abstract class AbstractTransport<T extends AbstractTransport<T>> implements Tran
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" + model + ", capacity=" + capacity + ")";
+        return getClass().getSimpleName() + "(" + model + ", вместимость=" + capacity + ")";
     }
 }
 
@@ -146,7 +141,7 @@ final class CombustionEngine implements Engine {
     private boolean running;
 
     CombustionEngine(int powerHP, FuelType fuel) {
-        if (powerHP <= 0) throw new IllegalArgumentException("powerHP must be > 0");
+        if (powerHP <= 0) throw new IllegalArgumentException("мощность должна быть > 0");
         this.powerHP = powerHP;
         this.fuel = Objects.requireNonNull(fuel);
     }
@@ -157,7 +152,7 @@ final class CombustionEngine implements Engine {
     @Override public void start() { running = true; }
     @Override public void stop() { running = false; }
 
-    @Override public String toString() { return "ICE{" + fuel + ", " + powerHP + "hp}"; }
+    @Override public String toString() { return "ДВС{" + fuel + ", " + powerHP + " л.с.}"; }
 }
 
 final class ElectricMotor implements Engine {
@@ -166,8 +161,8 @@ final class ElectricMotor implements Engine {
     private boolean running;
 
     ElectricMotor(int powerHP, double batteryKWh) {
-        if (powerHP <= 0) throw new IllegalArgumentException("powerHP must be > 0");
-        if (batteryKWh <= 0) throw new IllegalArgumentException("batteryKWh must be > 0");
+        if (powerHP <= 0) throw new IllegalArgumentException("мощность должна быть > 0");
+        if (batteryKWh <= 0) throw new IllegalArgumentException("ёмкость батареи должна быть > 0");
         this.powerHP = powerHP;
         this.batteryKWh = batteryKWh;
     }
@@ -178,7 +173,7 @@ final class ElectricMotor implements Engine {
     @Override public void start() { running = true; }
     @Override public void stop() { running = false; }
 
-    @Override public String toString() { return "EV{" + batteryKWh + "kWh, " + powerHP + "hp}"; }
+    @Override public String toString() { return "Электро{" + batteryKWh + " кВт·ч, " + powerHP + " л.с.}"; }
 }
 
 // ==========================
@@ -191,7 +186,7 @@ final class Car extends AbstractTransport<Car> implements HasEngine<CombustionEn
 
     Car(String model, int capacity, MovementStrategy<Car> movement, CombustionEngine engine, int doors) {
         super(model, capacity, movement);
-        if (doors <= 0) throw new IllegalArgumentException("doors must be > 0");
+        if (doors <= 0) throw new IllegalArgumentException("число дверей должно быть > 0");
         this.engine = Objects.requireNonNull(engine);
         this.doors = doors;
     }
@@ -201,7 +196,7 @@ final class Car extends AbstractTransport<Car> implements HasEngine<CombustionEn
     @Override protected Car self() { return this; }
 
     @Override public String toString() {
-        return super.toString() + ", " + engine + ", doors=" + doors;
+        return super.toString() + ", " + engine + ", дверей=" + doors;
     }
 }
 
@@ -224,7 +219,7 @@ final class Bicycle extends AbstractTransport<Bicycle> {
 
     Bicycle(String model, int capacity, MovementStrategy<Bicycle> movement, int gears) {
         super(model, capacity, movement);
-        if (gears <= 0) throw new IllegalArgumentException("gears must be > 0");
+        if (gears <= 0) throw new IllegalArgumentException("число передач должно быть > 0");
         this.gears = gears;
     }
 
@@ -317,7 +312,7 @@ final class BicycleFactory implements TransportFactory<Bicycle> {
     }
 
     @Override public Bicycle create(String model, int capacity) {
-        // по умолчанию 21 скорость — это настройка фабрики, а не транспорта
+        // по умолчанию 21 передача — настройка фабрики, а не транспорта
         return new Bicycle(model, capacity, movement, 21);
     }
 }
