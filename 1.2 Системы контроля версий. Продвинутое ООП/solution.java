@@ -31,7 +31,7 @@ enum FuelType {
 }
 
 // Запечатанный абстрактный базовый класс для всех видов транспорта
-sealed abstract class Transport permits Car, Airplane, Ship, Bicycle {
+sealed abstract class Transport permits Car, Airplane, Ship, Bicycle, ElectricCar {
     protected final String model;
     protected final int capacity; // пассажировместимость
 
@@ -100,24 +100,19 @@ sealed abstract class Engine permits CombustionEngine, ElectricMotor {
 // Конечная реализация для ДВС
 final class CombustionEngine extends Engine {
     private final FuelType fuelType;
-    private final int displacementCC; // рабочий объем, куб. см
 
-    public CombustionEngine(int powerHP, FuelType fuelType, int displacementCC) {
+    public CombustionEngine(int powerHP, FuelType fuelType) {
         super(powerHP);
         this.fuelType = Objects.requireNonNull(fuelType);
-        if (displacementCC <= 0) throw new IllegalArgumentException("Объем должен быть положительным");
-        this.displacementCC = displacementCC;
     }
 
     public FuelType getFuelType() { return fuelType; }
-    public int getDisplacementCC() { return displacementCC; }
 
     @Override
     public String toString() {
-        return "ДВС %s, %d л.с., %.1f л".formatted(
+        return "ДВС %s, %d л.с.".formatted(
                 fuelType,
-                getPowerHP(),
-                displacementCC / 1000.0
+                getPowerHP()
         );
     }
 }
@@ -251,6 +246,34 @@ final class Bicycle extends Transport {
     }
 }
 
+final class ElectricCar extends Transport implements EnginePowered {
+    private final ElectricMotor motor;
+    private final int doors;
+
+    public ElectricCar(String model, int capacity, ElectricMotor motor, int doors) {
+        super(model, capacity);
+        if (doors <= 0) throw new IllegalArgumentException("Количество дверей должно быть положительным");
+        this.motor = Objects.requireNonNull(motor);
+        this.doors = doors;
+    }
+
+    @Override
+    public Engine getEngine() { return motor; }
+
+    @Override
+    public double getMaxSpeed() { return 220; }
+
+    @Override
+    public void move() {
+        System.out.println("Электромобиль тихо разгоняется...");
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", двери: " + doors + ", двигатель: " + motor;
+    }
+}
+
 // ==========================
 //       КОНСОЛЬНОЕ ПРИЛОЖЕНИЕ
 // ==========================
@@ -271,8 +294,9 @@ class ConsoleApp {
                     case 2 -> createAirplane();
                     case 3 -> createShip();
                     case 4 -> createBicycle();
-                    case 5 -> listFleet();
-                    case 6 -> operateTransport();
+                    case 5 -> createElectricCar();
+                    case 6 -> listFleet();
+                    case 7 -> operateTransport();
                     case 0 -> running = false;
                     default -> System.out.println("Неизвестный пункт меню");
                 }
@@ -290,8 +314,9 @@ class ConsoleApp {
         System.out.println("  2) Создать самолёт");
         System.out.println("  3) Создать корабль");
         System.out.println("  4) Создать велосипед");
-        System.out.println("  5) Показать весь транспорт");
-        System.out.println("  6) Управление транспортом");
+        System.out.println("  5) Создать электромобиль");
+        System.out.println("  6) Показать весь транспорт");
+        System.out.println("  7) Управление транспортом");
         System.out.println("  0) Выход");
     }
 
@@ -300,10 +325,9 @@ class ConsoleApp {
         String model = readLine("Модель: ");
         int cap = readInt("Вместимость (кол-во мест): ");
         int hp = readInt("Мощность (л.с.): ");
-        int cc = readInt("Объём двигателя (куб.см): ");
         FuelType fuel = chooseFuel(List.of(FuelType.GASOLINE, FuelType.DIESEL));
         int doors = readInt("Количество дверей: ");
-        Car car = new Car(model, cap, new CombustionEngine(hp, fuel, cc), doors);
+        Car car = new Car(model, cap, new CombustionEngine(hp, fuel), doors);
         fleet.add(car);
         System.out.println("Добавлено: " + car);
     }
@@ -313,9 +337,8 @@ class ConsoleApp {
         String model = readLine("Модель: ");
         int cap = readInt("Вместимость (кол-во мест): ");
         int hp = readInt("Мощность двигателя (л.с.): ");
-        int cc = readInt("Объём двигателя (куб.см): ");
         double wing = readDouble("Размах крыла (м): ");
-        Airplane plane = new Airplane(model, cap, new CombustionEngine(hp, FuelType.JET_FUEL, cc), wing);
+        Airplane plane = new Airplane(model, cap, new CombustionEngine(hp, FuelType.JET_FUEL), wing);
         fleet.add(plane);
         System.out.println("Добавлено: " + plane);
     }
@@ -325,9 +348,8 @@ class ConsoleApp {
         String model = readLine("Модель: ");
         int cap = readInt("Вместимость (кол-во мест): ");
         int hp = readInt("Мощность двигателя (л.с.): ");
-        int cc = readInt("Объём двигателя (куб.см): ");
         double disp = readDouble("Водоизмещение (т): ");
-        Ship ship = new Ship(model, cap, new CombustionEngine(hp, FuelType.DIESEL, cc), disp);
+        Ship ship = new Ship(model, cap, new CombustionEngine(hp, FuelType.DIESEL), disp);
         fleet.add(ship);
         System.out.println("Добавлено: " + ship);
     }
@@ -340,6 +362,18 @@ class ConsoleApp {
         Bicycle bicycle = new Bicycle(model, cap, gears);
         fleet.add(bicycle);
         System.out.println("Добавлено: " + bicycle);
+    }
+
+    private void createElectricCar() {
+        System.out.println("Создание электромобиля");
+        String model = readLine("Модель: ");
+        int cap = readInt("Вместимость (кол-во мест): ");
+        int hp = readInt("Мощность электромотора (л.с.): ");
+        double kwh = readDouble("Ёмкость батареи (кВт·ч): ");
+        int doors = readInt("Количество дверей: ");
+        ElectricCar ev = new ElectricCar(model, cap, new ElectricMotor(hp, kwh), doors);
+        fleet.add(ev);
+        System.out.println("Добавлено: " + ev);
     }
 
     private void listFleet() {

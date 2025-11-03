@@ -33,7 +33,6 @@ abstract class Engine <<sealed>> {
 
 class CombustionEngine <<final>> {
   - fuelType: FuelType
-  - displacementCC: int
 }
 
 class ElectricMotor <<final>> {
@@ -41,11 +40,13 @@ class ElectricMotor <<final>> {
 }
 
 class Car <<final>>
+class ElectricCar <<final>>
 class Airplane <<final>>
 class Ship <<final>>
 class Bicycle <<final>>
 
 Transport <|-- Car
+Transport <|-- ElectricCar
 Transport <|-- Airplane
 Transport <|-- Ship
 Transport <|-- Bicycle
@@ -55,10 +56,12 @@ Engine <|-- ElectricMotor
 
 CombustionEngine --> FuelType
 Car ..|> EnginePowered
+ElectricCar ..|> EnginePowered
 Airplane ..|> EnginePowered
 Ship ..|> EnginePowered
 
 Car --> CombustionEngine
+ElectricCar --> ElectricMotor
 Airplane --> CombustionEngine
 Ship --> CombustionEngine
 
@@ -68,4 +71,3 @@ note right of Bicycle
 end note
 
 @enduml
-
