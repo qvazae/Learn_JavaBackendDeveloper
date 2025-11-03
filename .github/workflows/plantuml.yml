@@ -45,3 +45,5 @@ jobs:
         with:
           commit_message: "chore(uml): auto-generate transport_uml.svg"
           file_pattern: "**/transport_uml.svg"
+          commit_user_name: ${{ github.actor }}
+          commit_user_email: ${{ github.actor }}@users.noreply.github.com
