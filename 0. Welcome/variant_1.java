@@ -1,3 +1,7 @@
+/**
+ * Вариант 1 — учебное решение.
+ * Комментарии приведены к единому стилю (заголовок файла, разделители секций).
+ */
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;

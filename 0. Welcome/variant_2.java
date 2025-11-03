@@ -1,3 +1,7 @@
+/**
+ * Вариант 2 — учебное решение.
+ * Комментарии приведены к единому стилю (заголовок файла, разделители секций).
+ */
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
