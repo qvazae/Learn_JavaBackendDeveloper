@@ -36,14 +36,17 @@ jobs:
           curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.6/plantuml-1.2024.6.jar
 
       - name: Render UML to SVG
+        shell: bash
         run: |
-          java -Djava.awt.headless=true -jar plantuml.jar -tsvg "1.2 Системы контроля версий. Продвинутое ООП/transport_uml.puml"
-          ls -la "1.2 Системы контроля версий. Продвинутое ООП" || true
+          set -euo pipefail
+          find . -type f -name "*.puml" -print0 | xargs -0 -I{} bash -lc 'java -Djava.awt.headless=true -jar plantuml.jar -tsvg "$1"' _ {}
+          git status --porcelain || true
 
       - name: Commit generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(uml): auto-generate transport_uml.svg"
+          commit_message: "Внесены небольшие изменения"
           file_pattern: "**/transport_uml.svg"
           commit_user_name: ${{ github.actor }}
           commit_user_email: ${{ github.actor }}@users.noreply.github.com
+
