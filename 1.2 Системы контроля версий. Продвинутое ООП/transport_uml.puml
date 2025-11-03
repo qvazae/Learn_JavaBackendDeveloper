@@ -65,7 +65,7 @@ ElectricCar --> ElectricMotor
 Airplane --> CombustionEngine
 Ship --> CombustionEngine
 
-note right of Bicycle
+note left of Bicycle
   Велосипед не реализует EnginePowered,
   так как у него нет двигателя
 end note
