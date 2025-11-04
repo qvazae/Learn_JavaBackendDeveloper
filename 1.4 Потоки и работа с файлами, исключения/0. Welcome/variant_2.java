@@ -1,6 +1,6 @@
-﻿/**
- * Ð’Ð°Ñ€Ð¸Ð°Ð½Ñ‚ 2 â€” ÑƒÑ‡ÐµÐ±Ð½Ð¾Ðµ Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ.
- * ÐšÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸ Ð¿Ñ€Ð¸Ð²ÐµÐ´ÐµÐ½Ñ‹ Ðº ÐµÐ´Ð¸Ð½Ð¾Ð¼Ñƒ ÑÑ‚Ð¸Ð»ÑŽ (Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº Ñ„Ð°Ð¹Ð»Ð°, Ñ€Ð°Ð·Ð´ÐµÐ»Ð¸Ñ‚ÐµÐ»Ð¸ ÑÐµÐºÑ†Ð¸Ð¹).
+﻿?/**
+ * Вариант 2 — учебное решение.
+ * Комментарии приведены к единому стилю (заголовок файла, разделители секций).
  */
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,21 +13,21 @@ import java.util.regex.Pattern;
 
 public class variant_2 {
 
-    // ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð²Ñ‹Ñ‡Ð¸ÑÐ»ÐµÐ½Ð¸Ð¹
+    // Настройки вычислений
     private static final MathContext MC = MathContext.DECIMAL128;
     private static final int DIV_SCALE = 50;
 
     private static final Scanner SC = new Scanner(System.in);
 
-    // Ð’Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ð²Ð¸Ð´Ð°: <Ñ‡Ð¸ÑÐ»Ð¾> <Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€> <Ñ‡Ð¸ÑÐ»Ð¾>
+    // Выражение вида: <число> <оператор> <число>
     private static final Pattern EXPR = Pattern.compile(
             "^\\s*([+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+))\\s*(//|[+\\-*/%^])\\s*([+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+))\\s*$"
     );
     private static final Pattern INT_LIKE = Pattern.compile("[+-]?\\d+");
 
     public static void main(String[] args) {
-    p    // Обёртка для защиты от некорректного ввода и ошибок логики     p    try {
-        // Hook Ð½Ð° Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¸Ðµ â€” Ð¿Ð¾Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÐ²Ð¾Ð¸ .class Ð´Ð°Ð¶Ðµ Ð¿Ñ€Ð¸ Ð°Ð²Ð°Ñ€Ð¸Ð¹Ð½Ð¾Ð¼ Ð²Ñ‹Ñ…Ð¾Ð´Ðµ
+    p    // ??????? ??? ?????? ?? ????????????? ????? ? ?????? ??????     p    try {
+        // Hook на завершение — попробуем удалить свои .class даже при аварийном выходе
         Runtime.getRuntime().addShutdownHook(new Thread(variant_2::tryDeleteOwnClassFile));
 
         printHelp();
@@ -37,38 +37,38 @@ public class variant_2 {
             String line;
             try {
                 if (!SC.hasNextLine()) {
-                    System.out.println("Ð’Ñ…Ð¾Ð´Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð·Ð°ÐºÐ¾Ð½Ñ‡Ð¸Ð»Ð¸ÑÑŒ. Ð’Ñ‹Ñ…Ð¾Ð´...");
+                    System.out.println("Входные данные закончились. Выход...");
                     break;
                 }
                 line = SC.nextLine();
             } catch (NoSuchElementException | IllegalStateException e) {
-                System.out.println("Ð’Ñ…Ð¾Ð´Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹. Ð’Ñ‹Ñ…Ð¾Ð´...");
+                System.out.println("Входные данные недоступны. Выход...");
                 break;
             }
 
             line = line.trim();
             if (line.equalsIgnoreCase("exit")) {
-                System.out.println("Ð’Ñ‹Ñ…Ð¾Ð´...");
+                System.out.println("Выход...");
                 break;
             }
             if (line.isEmpty()) {
-                System.out.println("ÐÐµÐ²ÐµÑ€Ð½Ð¾Ðµ Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ. Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐµÑ‰Ñ‘ Ñ€Ð°Ð·:");
+                System.out.println("Неверное выражение. Введите ещё раз:");
                 continue;
             }
 
-            // Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ
+            // Валидация выражения
             ParseResult pr = validateExpression(line);
             if (!pr.ok) {
-                // ÐŸÐ¾ÐºÐ°Ð¶ÐµÐ¼ ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½ÑƒÑŽ Ð¿Ñ€Ð¸Ñ‡Ð¸Ð½Ñƒ, ÐµÑÐ»Ð¸ Ð¾Ð½Ð° ÐµÑÑ‚ÑŒ
+                // Покажем конкретную причину, если она есть
                 if (pr.errorMessage != null && !pr.errorMessage.isBlank()) {
                     System.out.println(pr.errorMessage);
                 } else {
-                    System.out.println("ÐÐµÐ²ÐµÑ€Ð½Ð¾Ðµ Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ. Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐµÑ‰Ñ‘ Ñ€Ð°Ð·:");
+                    System.out.println("Неверное выражение. Введите ещё раз:");
                 }
                 continue;
             }
 
-            // Ð’Ñ‹Ñ‡Ð¸ÑÐ»ÐµÐ½Ð¸Ðµ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð°
+            // Вычисление результата
             try {
                 String op = pr.operator;
                 String result;
@@ -84,44 +84,44 @@ public class variant_2 {
                     case "^" -> result = pow(new BigInteger(requireInteger(pr.left)),
                                              new BigInteger(requireInteger(pr.right)));
                     default -> {
-                        System.out.println("ÐÐµÐ¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÐ¼Ð°Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ñ.");
+                        System.out.println("Неподдерживаемая операция.");
                         continue;
                     }
                 }
-                System.out.println("Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚: " + result);
+                System.out.println("Результат: " + result);
             } catch (ArithmeticException ae) {
-                System.out.println("ÐžÑˆÐ¸Ð±ÐºÐ° Ð²Ñ‹Ñ‡Ð¸ÑÐ»ÐµÐ½Ð¸Ñ: " + ae.getMessage());
+                System.out.println("Ошибка вычисления: " + ae.getMessage());
             } catch (NumberFormatException nfe) {
-                System.out.println("ÐžÑˆÐ¸Ð±ÐºÐ° Ð²Ð²Ð¾Ð´Ð°: Ð´Ð»Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¹ //, % Ð¸ ^ Ñ‚Ñ€ÐµÐ±ÑƒÑŽÑ‚ÑÑ Ñ†ÐµÐ»Ñ‹Ðµ Ñ‡Ð¸ÑÐ»Ð°.");
+                System.out.println("Ошибка ввода: для операций //, % и ^ требуются целые числа.");
             } catch (IllegalArgumentException iae) {
-                System.out.println("ÐžÑˆÐ¸Ð±ÐºÐ°: " + iae.getMessage());
+                System.out.println("Ошибка: " + iae.getMessage());
             } catch (Exception e) {
-                System.out.println("ÐÐµÐ¿Ñ€ÐµÐ´Ð²Ð¸Ð´ÐµÐ½Ð½Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + e.getMessage());
+                System.out.println("Непредвиденная ошибка: " + e.getMessage());
             }
         }
 
-        // Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ .class Ð² ÐºÐ¾Ð½Ñ†Ðµ Ð¾Ð±Ñ‹Ñ‡Ð½Ð¾Ð³Ð¾ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¸Ñ
+        // Удаление .class в конце обычного завершения
         tryDeleteOwnClassFile();
-    p    } catch (Exception e) {     p        System.out.println("Произошла ошибка ввода/логики: " + (e.getMessage() == null ? e.toString() : e.getMessage()));     p        // Продолжение работы: завершаем безопасно без падения     p    }
+    p    } catch (Exception e) {     p        System.out.println("????????? ?????? ?????/??????: " + (e.getMessage() == null ? e.toString() : e.getMessage()));     p        // ??????????? ??????: ????????? ????????? ??? ???????     p    }
     }
 
-    // Ð¡Ð¿Ñ€Ð°Ð²ÐºÐ°
+    // Справка
 
     private static void printHelp() {
-        System.out.println("ÐŸÐ¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÐ¼Ñ‹Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸:");
-        System.out.println("  +  : ÑÐ»Ð¾Ð¶ÐµÐ½Ð¸Ðµ (Ð´ÐµÑÑÑ‚Ð¸Ñ‡Ð½Ñ‹Ðµ Ð¸ Ñ†ÐµÐ»Ñ‹Ðµ)");
-        System.out.println("  -  : Ð²Ñ‹Ñ‡Ð¸Ñ‚Ð°Ð½Ð¸Ðµ (Ð´ÐµÑÑÑ‚Ð¸Ñ‡Ð½Ñ‹Ðµ Ð¸ Ñ†ÐµÐ»Ñ‹Ðµ)");
-        System.out.println("  *  : ÑƒÐ¼Ð½Ð¾Ð¶ÐµÐ½Ð¸Ðµ (Ð´ÐµÑÑÑ‚Ð¸Ñ‡Ð½Ñ‹Ðµ Ð¸ Ñ†ÐµÐ»Ñ‹Ðµ)");
-        System.out.println("  /  : Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ (Ð´ÐµÑÑÑ‚Ð¸Ñ‡Ð½Ñ‹Ðµ Ð¸ Ñ†ÐµÐ»Ñ‹Ðµ), Ð¾ÐºÑ€ÑƒÐ³Ð»ÐµÐ½Ð¸Ðµ Ð´Ð¾ " + DIV_SCALE + " Ð·Ð½Ð°ÐºÐ¾Ð²");
-        System.out.println("  // : Ñ†ÐµÐ»Ð¾Ñ‡Ð¸ÑÐ»ÐµÐ½Ð½Ð¾Ðµ Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ (Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ†ÐµÐ»Ñ‹Ðµ)");
-        System.out.println("  %  : Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ðº Ð¾Ñ‚ Ð´ÐµÐ»ÐµÐ½Ð¸Ñ (Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ†ÐµÐ»Ñ‹Ðµ)");
-        System.out.println("  ^  : Ð²Ð¾Ð·Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ Ð² ÑÑ‚ÐµÐ¿ÐµÐ½ÑŒ (Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ñ†ÐµÐ»Ñ‹Ðµ, Ð¿Ð¾ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸ â€” Ñ†ÐµÐ»Ð¾Ðµ Ð½ÐµÐ¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ðµ)");
-        System.out.println("Ð¤Ð¾Ñ€Ð¼Ð°Ñ‚ Ð²Ð²Ð¾Ð´Ð°: <Ñ‡Ð¸ÑÐ»Ð¾> <Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€> <Ñ‡Ð¸ÑÐ»Ð¾>, Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€: 15 + 29");
-        System.out.println("Ð”Ð»Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð° Ð²Ð²ÐµÐ´Ð¸Ñ‚Ðµ: exit");
+        System.out.println("Поддерживаемые операции:");
+        System.out.println("  +  : сложение (десятичные и целые)");
+        System.out.println("  -  : вычитание (десятичные и целые)");
+        System.out.println("  *  : умножение (десятичные и целые)");
+        System.out.println("  /  : деление (десятичные и целые), округление до " + DIV_SCALE + " знаков");
+        System.out.println("  // : целочисленное деление (только целые)");
+        System.out.println("  %  : остаток от деления (только целые)");
+        System.out.println("  ^  : возведение в степень (только целые, показатель степени — целое неотрицательное)");
+        System.out.println("Формат ввода: <число> <оператор> <число>, например: 15 + 29");
+        System.out.println("Для выхода введите: exit");
         System.out.println();
     }
 
-    // Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ
+    // Валидация выражения
 
     private static ParseResult validateExpression(String s) {
         Matcher m = EXPR.matcher(s);
@@ -132,7 +132,7 @@ public class variant_2 {
         String op = m.group(2);
         String right = m.group(3);
 
-        // ÐŸÑ€Ð¾Ð±ÑƒÐµÐ¼ Ñ€Ð°ÑÐ¿Ð°Ñ€ÑÐ¸Ñ‚ÑŒ Ñ‡Ð¸ÑÐ»Ð° ÐºÐ°Ðº BigDecimal (Ð±ÐµÐ· Ð¿ÐµÑ€ÐµÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¹ Ð¿Ñ€Ð¸Ð¼Ð¸Ñ‚Ð¸Ð²Ð¾Ð²)
+        // Пробуем распарсить числа как BigDecimal (без переполнений примитивов)
         try {
             new BigDecimal(left);
             new BigDecimal(right);
@@ -140,35 +140,35 @@ public class variant_2 {
             return ParseResult.error();
         }
 
-        // Ð”Ð¾Ð¿. Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ð¿Ð¾ Ñ‚Ð¸Ð¿Ñƒ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸
+        // Доп. проверки по типу операции
         switch (op) {
             case "/" -> {
                 if (isZeroDecimal(right)) {
-                    return ParseResult.error("ÐžÑˆÐ¸Ð±ÐºÐ° - Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ð° 0.");
+                    return ParseResult.error("Ошибка - деление на 0.");
                 }
             }
             case "//", "%" -> {
                 if (!isIntegerLike(left) || !isIntegerLike(right)) {
-                    return ParseResult.error("Ð”Ð»Ñ // Ð¸ % Ñ‚Ñ€ÐµÐ±ÑƒÑŽÑ‚ÑÑ Ñ†ÐµÐ»Ñ‹Ðµ Ñ‡Ð¸ÑÐ»Ð°.");
+                    return ParseResult.error("Для // и % требуются целые числа.");
                 }
                 if (isZeroInteger(right)) {
-                    return ParseResult.error("ÐžÑˆÐ¸Ð±ÐºÐ° - Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ð° 0.");
+                    return ParseResult.error("Ошибка - деление на 0.");
                 }
             }
             case "^" -> {
                 if (!isIntegerLike(left) || !isIntegerLike(right)) {
-                    return ParseResult.error("Ð”Ð»Ñ ^ Ñ‚Ñ€ÐµÐ±ÑƒÑŽÑ‚ÑÑ Ñ†ÐµÐ»Ñ‹Ðµ Ñ‡Ð¸ÑÐ»Ð°.");
+                    return ParseResult.error("Для ^ требуются целые числа.");
                 }
                 try {
                     BigInteger exp = new BigInteger(requireInteger(right));
                     if (exp.signum() < 0) {
-                        return ParseResult.error("ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸ Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ Ð½ÐµÐ¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼.");
+                        return ParseResult.error("Показатель степени должен быть неотрицательным.");
                     }
                     if (exp.compareTo(BigInteger.valueOf(10000)) > 0) {
-                        return ParseResult.error("Ð¡Ð»Ð¸ÑˆÐºÐ¾Ð¼ Ð±Ð¾Ð»ÑŒÑˆÐ°Ñ ÑÑ‚ÐµÐ¿ÐµÐ½ÑŒ (Ð¼Ð°ÐºÑÐ¸Ð¼ÑƒÐ¼ 10000 Ð´Ð»Ñ Ð±ÐµÐ·Ð¾Ð¿Ð°ÑÐ½Ð¾ÑÑ‚Ð¸).");
+                        return ParseResult.error("Слишком большая степень (максимум 10000 для безопасности).");
                     }
                 } catch (NumberFormatException ex) {
-                    return ParseResult.error("ÐÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ð¿Ð¾ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸.");
+                    return ParseResult.error("Неверный показатель степени.");
                 }
             }
         }
@@ -176,7 +176,7 @@ public class variant_2 {
         return ParseResult.ok(left, op, right);
     }
 
-    // ÐŸÐ¾Ð¼Ð¾Ñ‰Ð½Ð¸ÐºÐ¸ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ Ñ‡Ð¸ÑÐµÐ»
+    // Помощники проверки чисел
 
     private static boolean isIntegerLike(String s) {
         return INT_LIKE.matcher(s).matches();
@@ -198,13 +198,13 @@ public class variant_2 {
         }
     }
 
-    // Ð‘Ñ€Ð¾ÑÐ°ÐµÐ¼ NumberFormatException, ÐµÑÐ»Ð¸ Ñ‡Ð¸ÑÐ»Ð¾ Ð½Ðµ Ñ†ÐµÐ»Ð¾Ðµ â€” Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾ Ð¾Ñ‚Ð»Ð¾Ð²Ð¸Ñ‚ÑŒ
+    // Бросаем NumberFormatException, если число не целое — чтобы корректно отловить
     private static String requireInteger(String s) {
         if (!isIntegerLike(s)) throw new NumberFormatException("not integer");
         return s;
     }
 
-    // ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ð¸
+    // Операции
 
     private static String sum(BigDecimal a, BigDecimal b) {
         return a.add(b, MC).stripTrailingZeros().toPlainString();
@@ -219,7 +219,7 @@ public class variant_2 {
     }
 
     private static String divide(BigDecimal a, BigDecimal b) {
-        if (b.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException("Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ð° Ð½Ð¾Ð»ÑŒ");
+        if (b.compareTo(BigDecimal.ZERO) == 0) throw new ArithmeticException("деление на ноль");
         try {
             return a.divide(b, MC).stripTrailingZeros().toPlainString();
         } catch (ArithmeticException e) {
@@ -228,27 +228,27 @@ public class variant_2 {
     }
 
     private static String intDivide(BigInteger a, BigInteger b) {
-        if (b.equals(BigInteger.ZERO)) throw new ArithmeticException("Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ð° Ð½Ð¾Ð»ÑŒ");
+        if (b.equals(BigInteger.ZERO)) throw new ArithmeticException("деление на ноль");
         return a.divide(b).toString();
     }
 
     private static String mod(BigInteger a, BigInteger b) {
-        if (b.equals(BigInteger.ZERO)) throw new ArithmeticException("Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ð° Ð½Ð¾Ð»ÑŒ");
+        if (b.equals(BigInteger.ZERO)) throw new ArithmeticException("деление на ноль");
         return a.remainder(b).toString();
     }
 
     private static String pow(BigInteger base, BigInteger exponent) {
         if (exponent.signum() < 0) {
-            throw new IllegalArgumentException("ÐžÑ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð°Ñ ÑÑ‚ÐµÐ¿ÐµÐ½ÑŒ Ð´Ð»Ñ Ñ†ÐµÐ»Ñ‹Ñ… Ð½Ðµ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ÑÑ.");
+            throw new IllegalArgumentException("Отрицательная степень для целых не поддерживается.");
         }
         if (exponent.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
-            throw new IllegalArgumentException("Ð¡Ð»Ð¸ÑˆÐºÐ¾Ð¼ Ð±Ð¾Ð»ÑŒÑˆÐ°Ñ ÑÑ‚ÐµÐ¿ÐµÐ½ÑŒ.");
+            throw new IllegalArgumentException("Слишком большая степень.");
         }
         int exp = exponent.intValue();
         return base.pow(exp).toString();
     }
 
-    // Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð¿Ð°Ñ€ÑÐ¸Ð½Ð³Ð°
+    // Результат парсинга
 
     private static class ParseResult {
         final boolean ok;
@@ -278,18 +278,18 @@ public class variant_2 {
         }
     }
 
-    // Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ ÑÐ¾Ð±ÑÑ‚Ð²ÐµÐ½Ð½Ñ‹Ñ… .class
+    // Удаление собственных .class
 
     private static void tryDeleteOwnClassFile() {
         try {
             String mainName = variant_2.class.getSimpleName() + ".class";
             java.net.URL url = variant_2.class.getResource(mainName);
             if (url == null) {
-                System.out.println("Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ñ„Ð°Ð¹Ð»Ð¾Ð² .class Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¾.");
+                System.out.println("Удаление файлов .class завершено.");
                 return;
             }
             if (!"file".equalsIgnoreCase(url.getProtocol())) {
-                System.out.println("ÐŸÑ€Ð¾Ð¿ÑƒÑÐºÐ°ÑŽ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ðµ .class: Ð½Ðµ Ñ„Ð°Ð¹Ð»Ð¾Ð²Ð°Ñ ÑÐ¸ÑÑ‚ÐµÐ¼Ð° (" + url.getProtocol() + ").");
+                System.out.println("Пропускаю удаление .class: не файловая система (" + url.getProtocol() + ").");
                 return;
             }
 
@@ -305,15 +305,15 @@ public class variant_2 {
                     try {
                         boolean deleted = java.nio.file.Files.deleteIfExists(p);
                         if (deleted) {
-                            System.out.println("Ð¤Ð°Ð¹Ð» " + p.getFileName() + " Ð±Ñ‹Ð» ÑƒÐ´Ð°Ð»Ñ‘Ð½.");
+                            System.out.println("Файл " + p.getFileName() + " был удалён.");
                         }
                     } catch (Exception e) {
-                        System.out.println("ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ " + p.getFileName() + ": " + e.getMessage());
+                        System.out.println("Не удалось удалить " + p.getFileName() + ": " + e.getMessage());
                     }
                 });
             }
         } catch (Exception e) {
-            System.out.println("ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ð¸ .class: " + e.getMessage());
+            System.out.println("Ошибка при удалении .class: " + e.getMessage());
         }
     }
 }

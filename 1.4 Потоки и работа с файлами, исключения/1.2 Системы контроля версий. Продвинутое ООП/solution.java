@@ -1,24 +1,24 @@
-﻿import java.util.*;
+﻿?import java.util.*;
 
-// ÐžÑÐ½Ð¾Ð²Ð½Ð¾Ð¹ ÐºÐ»Ð°ÑÑ Ñ Ñ‚Ð¾Ñ‡ÐºÐ¾Ð¹ Ð²Ñ…Ð¾Ð´Ð°. Ð˜Ð¼Ñ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°ÐµÑ‚ Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ Ñ„Ð°Ð¹Ð»Ð°.
+// Основной класс с точкой входа. Имя совпадает с именем файла.
 public class solution {
     public static void main(String[] args) {
-    p    // Обёртка для защиты от некорректного ввода и ошибок логики     p    try {
+    p    // ??????? ??? ?????? ?? ????????????? ????? ? ?????? ??????     p    try {
         new ConsoleApp().run();
-    p    } catch (Exception e) {     p        System.out.println("Произошла ошибка ввода/логики: " + (e.getMessage() == null ? e.toString() : e.getMessage()));     p        // Продолжение работы: завершаем безопасно без падения     p    }
+    p    } catch (Exception e) {     p        System.out.println("????????? ?????? ?????/??????: " + (e.getMessage() == null ? e.toString() : e.getMessage()));     p        // ??????????? ??????: ????????? ????????? ??? ???????     p    }
     }
 }
 
 // ==========================
-//      Ð˜Ð•Ð ÐÐ Ð¥Ð˜Ð¯ Ð¢Ð ÐÐÐ¡ÐŸÐžÐ Ð¢Ð
+//      ИЕРАРХИЯ ТРАНСПОРТА
 // ==========================
 
-// ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Enum: Ð²Ð¸Ð´Ñ‹ Ñ‚Ð¾Ð¿Ð»Ð¸Ð²Ð°
+// Пример применения Enum: виды топлива
 enum FuelType {
-    GASOLINE("Ð‘ÐµÐ½Ð·Ð¸Ð½"),
-    DIESEL("Ð”Ð¸Ð·ÐµÐ»ÑŒ"),
-    JET_FUEL("ÐÐ²Ð¸Ð°-ÐºÐµÑ€Ð¾ÑÐ¸Ð½"),
-    ELECTRIC("Ð­Ð»ÐµÐºÑ‚Ñ€Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾");
+    GASOLINE("Бензин"),
+    DIESEL("Дизель"),
+    JET_FUEL("Авиа-керосин"),
+    ELECTRIC("Электричество");
 
     private final String title;
 
@@ -32,14 +32,14 @@ enum FuelType {
     }
 }
 
-// Ð—Ð°Ð¿ÐµÑ‡Ð°Ñ‚Ð°Ð½Ð½Ñ‹Ð¹ Ð°Ð±ÑÑ‚Ñ€Ð°ÐºÑ‚Ð½Ñ‹Ð¹ Ð±Ð°Ð·Ð¾Ð²Ñ‹Ð¹ ÐºÐ»Ð°ÑÑ Ð´Ð»Ñ Ð²ÑÐµÑ… Ð²Ð¸Ð´Ð¾Ð² Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð°
+// Запечатанный абстрактный базовый класс для всех видов транспорта
 sealed abstract class Transport permits Car, Airplane, Ship, Bicycle, ElectricCar {
     protected final String model;
-    protected final int capacity; // Ð¿Ð°ÑÑÐ°Ð¶Ð¸Ñ€Ð¾Ð²Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ
+    protected final int capacity; // пассажировместимость
 
     protected Transport(String model, int capacity) {
-        this.model = Objects.requireNonNullElse(model, "ÐÐµÑ‚-Ð¼Ð¾Ð´ÐµÐ»Ð¸");
-        if (capacity < 0) throw new IllegalArgumentException("Ð’Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð¹");
+        this.model = Objects.requireNonNullElse(model, "Нет-модели");
+        if (capacity < 0) throw new IllegalArgumentException("Вместимость не может быть отрицательной");
         this.capacity = capacity;
     }
 
@@ -50,7 +50,7 @@ sealed abstract class Transport permits Car, Airplane, Ship, Bicycle, ElectricCa
     public abstract void move();
 
     public String basicInfo() {
-        return "%s (Ð²Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ: %d)".formatted(model, capacity);
+        return "%s (вместимость: %d)".formatted(model, capacity);
     }
 
     @Override
@@ -59,36 +59,36 @@ sealed abstract class Transport permits Car, Airplane, Ship, Bicycle, ElectricCa
     }
 }
 
-// Ð˜Ð½Ñ‚ÐµÑ€Ñ„ÐµÐ¹Ñ Ð´Ð»Ñ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð° Ñ Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÐµÐ¼
+// Интерфейс для транспорта с двигателем
 interface EnginePowered {
     Engine getEngine();
 
     default void startEngine() {
         if (!getEngine().isRunning()) {
             getEngine().start();
-            System.out.println("Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ Ð·Ð°Ð¿ÑƒÑ‰ÐµÐ½.");
+            System.out.println("Двигатель запущен.");
         } else {
-            System.out.println("Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ ÑƒÐ¶Ðµ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚.");
+            System.out.println("Двигатель уже работает.");
         }
     }
 
     default void stopEngine() {
         if (getEngine().isRunning()) {
             getEngine().stop();
-            System.out.println("Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ Ð¾ÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½.");
+            System.out.println("Двигатель остановлен.");
         } else {
-            System.out.println("Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ ÑƒÐ¶Ðµ Ð¾ÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½.");
+            System.out.println("Двигатель уже остановлен.");
         }
     }
 }
 
-// Ð—Ð°Ð¿ÐµÑ‡Ð°Ñ‚Ð°Ð½Ð½Ñ‹Ð¹ Ð°Ð±ÑÑ‚Ñ€Ð°ÐºÑ‚Ð½Ñ‹Ð¹ ÐºÐ»Ð°ÑÑ Â«Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒÂ»
+// Запечатанный абстрактный класс «Двигатель»
 sealed abstract class Engine permits CombustionEngine, ElectricMotor {
     protected final int powerHP;
     private boolean running;
 
     protected Engine(int powerHP) {
-        if (powerHP <= 0) throw new IllegalArgumentException("ÐœÐ¾Ñ‰Ð½Ð¾ÑÑ‚ÑŒ Ð´Ð¾Ð»Ð¶Ð½Ð° Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð¹");
+        if (powerHP <= 0) throw new IllegalArgumentException("Мощность должна быть положительной");
         this.powerHP = powerHP;
         this.running = false;
     }
@@ -99,7 +99,7 @@ sealed abstract class Engine permits CombustionEngine, ElectricMotor {
     public void stop() { this.running = false; }
 }
 
-// ÐšÐ¾Ð½ÐµÑ‡Ð½Ð°Ñ Ñ€ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð»Ñ Ð”Ð’Ð¡
+// Конечная реализация для ДВС
 final class CombustionEngine extends Engine {
     private final FuelType fuelType;
 
@@ -112,20 +112,20 @@ final class CombustionEngine extends Engine {
 
     @Override
     public String toString() {
-        return "Ð”Ð’Ð¡ %s, %d Ð».Ñ.".formatted(
+        return "ДВС %s, %d л.с.".formatted(
                 fuelType,
                 getPowerHP()
         );
     }
 }
 
-// ÐšÐ¾Ð½ÐµÑ‡Ð½Ð°Ñ Ñ€ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ Ð´Ð»Ñ ÑÐ»ÐµÐºÑ‚Ñ€Ð¸Ñ‡ÐµÑÐºÐ¾Ð³Ð¾ Ð¼Ð¾Ñ‚Ð¾Ñ€Ð°
+// Конечная реализация для электрического мотора
 final class ElectricMotor extends Engine {
     private final double batteryKWh;
 
     public ElectricMotor(int powerHP, double batteryKWh) {
         super(powerHP);
-        if (batteryKWh <= 0) throw new IllegalArgumentException("ÐÐ¼ÐºÐ¾ÑÑ‚ÑŒ Ð´Ð¾Ð»Ð¶Ð½Ð° Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð¹");
+        if (batteryKWh <= 0) throw new IllegalArgumentException("Ёмкость должна быть положительной");
         this.batteryKWh = batteryKWh;
     }
 
@@ -133,12 +133,12 @@ final class ElectricMotor extends Engine {
 
     @Override
     public String toString() {
-        return "Ð­Ð»ÐµÐºÑ‚Ñ€Ð¾Ð¼Ð¾Ñ‚Ð¾Ñ€, %d Ð».Ñ., %.1f ÐºÐ’Ñ‚Â·Ñ‡".formatted(getPowerHP(), batteryKWh);
+        return "Электромотор, %d л.с., %.1f кВт·ч".formatted(getPowerHP(), batteryKWh);
     }
 }
 
 // --------------------------
-// ÐšÐ¾Ð½ÐµÑ‡Ð½Ñ‹Ðµ Ð²Ð¸Ð´Ñ‹ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð°
+// Конечные виды транспорта
 // --------------------------
 
 final class Car extends Transport implements EnginePowered {
@@ -147,7 +147,7 @@ final class Car extends Transport implements EnginePowered {
 
     public Car(String model, int capacity, CombustionEngine engine, int doors) {
         super(model, capacity);
-        if (doors <= 0) throw new IllegalArgumentException("ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð´Ð²ÐµÑ€ÐµÐ¹ Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼");
+        if (doors <= 0) throw new IllegalArgumentException("Количество дверей должно быть положительным");
         this.engine = Objects.requireNonNull(engine);
         this.doors = doors;
     }
@@ -160,22 +160,22 @@ final class Car extends Transport implements EnginePowered {
 
     @Override
     public void move() {
-        System.out.println("ÐÐ²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÑŒ ÐµÐ´ÐµÑ‚ Ð¿Ð¾ Ð´Ð¾Ñ€Ð¾Ð³Ðµ...");
+        System.out.println("Автомобиль едет по дороге...");
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Ð´Ð²ÐµÑ€Ð¸: " + doors + ", Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ: " + engine;
+        return super.toString() + ", двери: " + doors + ", двигатель: " + engine;
     }
 }
 
 final class Airplane extends Transport implements EnginePowered {
-    private final CombustionEngine engine; // ÑƒÐ¿Ñ€Ð¾Ñ‰Ñ‘Ð½Ð½Ð¾: Ð¾Ð´Ð¸Ð½ Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ
-    private final double wingspan; // Ñ€Ð°Ð·Ð¼Ð°Ñ… ÐºÑ€Ñ‹Ð»Ð°, Ð¼
+    private final CombustionEngine engine; // упрощённо: один двигатель
+    private final double wingspan; // размах крыла, м
 
     public Airplane(String model, int capacity, CombustionEngine engine, double wingspan) {
         super(model, capacity);
-        if (wingspan <= 0) throw new IllegalArgumentException("Ð Ð°Ð·Ð¼Ð°Ñ… ÐºÑ€Ñ‹Ð»Ð° Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼");
+        if (wingspan <= 0) throw new IllegalArgumentException("Размах крыла должен быть положительным");
         this.engine = Objects.requireNonNull(engine);
         this.wingspan = wingspan;
     }
@@ -188,22 +188,22 @@ final class Airplane extends Transport implements EnginePowered {
 
     @Override
     public void move() {
-        System.out.println("Ð¡Ð°Ð¼Ð¾Ð»Ñ‘Ñ‚ Ñ€Ð°Ð·Ð³Ð¾Ð½ÑÐµÑ‚ÑÑ Ð¸ Ð²Ð·Ð»ÐµÑ‚Ð°ÐµÑ‚...");
+        System.out.println("Самолёт разгоняется и взлетает...");
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", ÐºÑ€Ñ‹Ð»Ð¾: " + wingspan + " Ð¼, Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ: " + engine;
+        return super.toString() + ", крыло: " + wingspan + " м, двигатель: " + engine;
     }
 }
 
 final class Ship extends Transport implements EnginePowered {
     private final CombustionEngine engine;
-    private final double displacementTons; // Ð²Ð¾Ð´Ð¾Ð¸Ð·Ð¼ÐµÑ‰ÐµÐ½Ð¸Ðµ, Ñ‚
+    private final double displacementTons; // водоизмещение, т
 
     public Ship(String model, int capacity, CombustionEngine engine, double displacementTons) {
         super(model, capacity);
-        if (displacementTons <= 0) throw new IllegalArgumentException("Ð’Ð¾Ð´Ð¾Ð¸Ð·Ð¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼");
+        if (displacementTons <= 0) throw new IllegalArgumentException("Водоизмещение должно быть положительным");
         this.engine = Objects.requireNonNull(engine);
         this.displacementTons = displacementTons;
     }
@@ -216,12 +216,12 @@ final class Ship extends Transport implements EnginePowered {
 
     @Override
     public void move() {
-        System.out.println("ÐšÐ¾Ñ€Ð°Ð±Ð»ÑŒ Ð¸Ð´Ñ‘Ñ‚ Ð¿Ð¾ Ð²Ð¾Ð´Ðµ...");
+        System.out.println("Корабль идёт по воде...");
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Ð²Ð¾Ð´Ð¾Ð¸Ð·Ð¼ÐµÑ‰ÐµÐ½Ð¸Ðµ: " + displacementTons + " Ñ‚, Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ: " + engine;
+        return super.toString() + ", водоизмещение: " + displacementTons + " т, двигатель: " + engine;
     }
 }
 
@@ -230,7 +230,7 @@ final class Bicycle extends Transport {
 
     public Bicycle(String model, int capacity, int gears) {
         super(model, capacity);
-        if (gears <= 0) throw new IllegalArgumentException("Ð§Ð¸ÑÐ»Ð¾ Ð¿ÐµÑ€ÐµÐ´Ð°Ñ‡ Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼");
+        if (gears <= 0) throw new IllegalArgumentException("Число передач должно быть положительным");
         this.gears = gears;
     }
 
@@ -239,12 +239,12 @@ final class Bicycle extends Transport {
 
     @Override
     public void move() {
-        System.out.println("Ð’ÐµÐ»Ð¾ÑÐ¸Ð¿ÐµÐ´Ð¸ÑÑ‚ ÐºÑ€ÑƒÑ‚Ð¸Ñ‚ Ð¿ÐµÐ´Ð°Ð»Ð¸...");
+        System.out.println("Велосипедист крутит педали...");
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Ð¿ÐµÑ€ÐµÐ´Ð°Ñ‡: " + gears;
+        return super.toString() + ", передач: " + gears;
     }
 }
 
@@ -254,7 +254,7 @@ final class ElectricCar extends Transport implements EnginePowered {
 
     public ElectricCar(String model, int capacity, ElectricMotor motor, int doors) {
         super(model, capacity);
-        if (doors <= 0) throw new IllegalArgumentException("ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð´Ð²ÐµÑ€ÐµÐ¹ Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼");
+        if (doors <= 0) throw new IllegalArgumentException("Количество дверей должно быть положительным");
         this.motor = Objects.requireNonNull(motor);
         this.doors = doors;
     }
@@ -267,17 +267,17 @@ final class ElectricCar extends Transport implements EnginePowered {
 
     @Override
     public void move() {
-        System.out.println("Ð­Ð»ÐµÐºÑ‚Ñ€Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÑŒ Ñ‚Ð¸Ñ…Ð¾ Ñ€Ð°Ð·Ð³Ð¾Ð½ÑÐµÑ‚ÑÑ...");
+        System.out.println("Электромобиль тихо разгоняется...");
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Ð´Ð²ÐµÑ€Ð¸: " + doors + ", Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ: " + motor;
+        return super.toString() + ", двери: " + doors + ", двигатель: " + motor;
     }
 }
 
 // ==========================
-//       ÐšÐžÐÐ¡ÐžÐ›Ð¬ÐÐžÐ• ÐŸÐ Ð˜Ð›ÐžÐ–Ð•ÐÐ˜Ð•
+//       КОНСОЛЬНОЕ ПРИЛОЖЕНИЕ
 // ==========================
 
 class ConsoleApp {
@@ -285,11 +285,11 @@ class ConsoleApp {
     private final List<Transport> fleet = new ArrayList<>();
 
     public void run() {
-        System.out.println("Ð¢Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð½Ð°Ñ ÑÐ¸ÑÑ‚ÐµÐ¼Ð° (Sealed/Enum/Abstraction)\n");
+        System.out.println("Транспортная система (Sealed/Enum/Abstraction)\n");
         boolean running = true;
         while (running) {
             printMenu();
-            int choice = readInt("Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¿ÑƒÐ½ÐºÑ‚: ");
+            int choice = readInt("Выберите пункт: ");
             try {
                 switch (choice) {
                     case 1 -> createCar();
@@ -300,90 +300,90 @@ class ConsoleApp {
                     case 6 -> listFleet();
                     case 7 -> operateTransport();
                     case 0 -> running = false;
-                    default -> System.out.println("ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ñ‹Ð¹ Ð¿ÑƒÐ½ÐºÑ‚ Ð¼ÐµÐ½ÑŽ");
+                    default -> System.out.println("Неизвестный пункт меню");
                 }
             } catch (IllegalArgumentException ex) {
-                System.out.println("ÐžÑˆÐ¸Ð±ÐºÐ° Ð²Ð²Ð¾Ð´Ð°: " + ex.getMessage());
+                System.out.println("Ошибка ввода: " + ex.getMessage());
             }
             System.out.println();
         }
-        System.out.println("Ð’Ñ‹Ñ…Ð¾Ð´. Ð”Ð¾ ÑÐ²Ð¸Ð´Ð°Ð½Ð¸Ñ!");
+        System.out.println("Выход. До свидания!");
     }
 
     private void printMenu() {
-        System.out.println("ÐœÐµÐ½ÑŽ:");
-        System.out.println("  1) Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÑŒ");
-        System.out.println("  2) Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÐ°Ð¼Ð¾Ð»Ñ‘Ñ‚");
-        System.out.println("  3) Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ ÐºÐ¾Ñ€Ð°Ð±Ð»ÑŒ");
-        System.out.println("  4) Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ð²ÐµÐ»Ð¾ÑÐ¸Ð¿ÐµÐ´");
-        System.out.println("  5) Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÑŒ");
-        System.out.println("  6) ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ð²ÐµÑÑŒ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚");
-        System.out.println("  7) Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð¾Ð¼");
-        System.out.println("  0) Ð’Ñ‹Ñ…Ð¾Ð´");
+        System.out.println("Меню:");
+        System.out.println("  1) Создать автомобиль");
+        System.out.println("  2) Создать самолёт");
+        System.out.println("  3) Создать корабль");
+        System.out.println("  4) Создать велосипед");
+        System.out.println("  5) Создать электромобиль");
+        System.out.println("  6) Показать весь транспорт");
+        System.out.println("  7) Управление транспортом");
+        System.out.println("  0) Выход");
     }
 
     private void createCar() {
-        System.out.println("Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ Ð°Ð²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»Ñ");
-        String model = readLine("ÐœÐ¾Ð´ÐµÐ»ÑŒ: ");
-        int cap = readInt("Ð’Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ (ÐºÐ¾Ð»-Ð²Ð¾ Ð¼ÐµÑÑ‚): ");
-        int hp = readInt("ÐœÐ¾Ñ‰Ð½Ð¾ÑÑ‚ÑŒ (Ð».Ñ.): ");
+        System.out.println("Создание автомобиля");
+        String model = readLine("Модель: ");
+        int cap = readInt("Вместимость (кол-во мест): ");
+        int hp = readInt("Мощность (л.с.): ");
         FuelType fuel = chooseFuel(List.of(FuelType.GASOLINE, FuelType.DIESEL));
-        int doors = readInt("ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð´Ð²ÐµÑ€ÐµÐ¹: ");
+        int doors = readInt("Количество дверей: ");
         Car car = new Car(model, cap, new CombustionEngine(hp, fuel), doors);
         fleet.add(car);
-        System.out.println("Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾: " + car);
+        System.out.println("Добавлено: " + car);
     }
 
     private void createAirplane() {
-        System.out.println("Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ ÑÐ°Ð¼Ð¾Ð»Ñ‘Ñ‚Ð°");
-        String model = readLine("ÐœÐ¾Ð´ÐµÐ»ÑŒ: ");
-        int cap = readInt("Ð’Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ (ÐºÐ¾Ð»-Ð²Ð¾ Ð¼ÐµÑÑ‚): ");
-        int hp = readInt("ÐœÐ¾Ñ‰Ð½Ð¾ÑÑ‚ÑŒ Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»Ñ (Ð».Ñ.): ");
-        double wing = readDouble("Ð Ð°Ð·Ð¼Ð°Ñ… ÐºÑ€Ñ‹Ð»Ð° (Ð¼): ");
+        System.out.println("Создание самолёта");
+        String model = readLine("Модель: ");
+        int cap = readInt("Вместимость (кол-во мест): ");
+        int hp = readInt("Мощность двигателя (л.с.): ");
+        double wing = readDouble("Размах крыла (м): ");
         Airplane plane = new Airplane(model, cap, new CombustionEngine(hp, FuelType.JET_FUEL), wing);
         fleet.add(plane);
-        System.out.println("Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾: " + plane);
+        System.out.println("Добавлено: " + plane);
     }
 
     private void createShip() {
-        System.out.println("Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ ÐºÐ¾Ñ€Ð°Ð±Ð»Ñ");
-        String model = readLine("ÐœÐ¾Ð´ÐµÐ»ÑŒ: ");
-        int cap = readInt("Ð’Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ (ÐºÐ¾Ð»-Ð²Ð¾ Ð¼ÐµÑÑ‚): ");
-        int hp = readInt("ÐœÐ¾Ñ‰Ð½Ð¾ÑÑ‚ÑŒ Ð´Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»Ñ (Ð».Ñ.): ");
-        double disp = readDouble("Ð’Ð¾Ð´Ð¾Ð¸Ð·Ð¼ÐµÑ‰ÐµÐ½Ð¸Ðµ (Ñ‚): ");
+        System.out.println("Создание корабля");
+        String model = readLine("Модель: ");
+        int cap = readInt("Вместимость (кол-во мест): ");
+        int hp = readInt("Мощность двигателя (л.с.): ");
+        double disp = readDouble("Водоизмещение (т): ");
         Ship ship = new Ship(model, cap, new CombustionEngine(hp, FuelType.DIESEL), disp);
         fleet.add(ship);
-        System.out.println("Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾: " + ship);
+        System.out.println("Добавлено: " + ship);
     }
 
     private void createBicycle() {
-        System.out.println("Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ Ð²ÐµÐ»Ð¾ÑÐ¸Ð¿ÐµÐ´Ð°");
-        String model = readLine("ÐœÐ¾Ð´ÐµÐ»ÑŒ: ");
-        int cap = readInt("Ð’Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ (Ð¾Ð±Ñ‹Ñ‡Ð½Ð¾ 1): ");
-        int gears = readInt("ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¿ÐµÑ€ÐµÐ´Ð°Ñ‡: ");
+        System.out.println("Создание велосипеда");
+        String model = readLine("Модель: ");
+        int cap = readInt("Вместимость (обычно 1): ");
+        int gears = readInt("Количество передач: ");
         Bicycle bicycle = new Bicycle(model, cap, gears);
         fleet.add(bicycle);
-        System.out.println("Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾: " + bicycle);
+        System.out.println("Добавлено: " + bicycle);
     }
 
     private void createElectricCar() {
-        System.out.println("Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð¼Ð¾Ð±Ð¸Ð»Ñ");
-        String model = readLine("ÐœÐ¾Ð´ÐµÐ»ÑŒ: ");
-        int cap = readInt("Ð’Ð¼ÐµÑÑ‚Ð¸Ð¼Ð¾ÑÑ‚ÑŒ (ÐºÐ¾Ð»-Ð²Ð¾ Ð¼ÐµÑÑ‚): ");
-        int hp = readInt("ÐœÐ¾Ñ‰Ð½Ð¾ÑÑ‚ÑŒ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð¼Ð¾Ñ‚Ð¾Ñ€Ð° (Ð».Ñ.): ");
-        double kwh = readDouble("ÐÐ¼ÐºÐ¾ÑÑ‚ÑŒ Ð±Ð°Ñ‚Ð°Ñ€ÐµÐ¸ (ÐºÐ’Ñ‚Â·Ñ‡): ");
-        int doors = readInt("ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð´Ð²ÐµÑ€ÐµÐ¹: ");
+        System.out.println("Создание электромобиля");
+        String model = readLine("Модель: ");
+        int cap = readInt("Вместимость (кол-во мест): ");
+        int hp = readInt("Мощность электромотора (л.с.): ");
+        double kwh = readDouble("Ёмкость батареи (кВт·ч): ");
+        int doors = readInt("Количество дверей: ");
         ElectricCar ev = new ElectricCar(model, cap, new ElectricMotor(hp, kwh), doors);
         fleet.add(ev);
-        System.out.println("Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾: " + ev);
+        System.out.println("Добавлено: " + ev);
     }
 
     private void listFleet() {
         if (fleet.isEmpty()) {
-            System.out.println("Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð¿ÑƒÑÑ‚.");
+            System.out.println("Список пуст.");
             return;
         }
-        System.out.println("Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¿Ð°Ñ€Ðº:");
+        System.out.println("Текущий парк:");
         for (int i = 0; i < fleet.size(); i++) {
             Transport t = fleet.get(i);
             System.out.printf("%d) %s%n", i + 1, t);
@@ -392,47 +392,47 @@ class ConsoleApp {
 
     private void operateTransport() {
         if (fleet.isEmpty()) {
-            System.out.println("ÐÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾Ð³Ð¾ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð°.");
+            System.out.println("Нет доступного транспорта.");
             return;
         }
         listFleet();
-        int idx = readIntWithin("Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½Ð¾Ð¼ÐµÑ€ Ñ‚Ñ€Ð°Ð½ÑÐ¿Ð¾Ñ€Ñ‚Ð°: ", 1, fleet.size()) - 1;
+        int idx = readIntWithin("Выберите номер транспорта: ", 1, fleet.size()) - 1;
         Transport t = fleet.get(idx);
-        System.out.println("Ð’Ñ‹ Ð²Ñ‹Ð±Ñ€Ð°Ð»Ð¸: " + t);
+        System.out.println("Вы выбрали: " + t);
 
         boolean back = false;
         while (!back) {
-            System.out.println("  Ð”ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ:");
-            System.out.println("   1) Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ");
-            System.out.println("   2) Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ: ÑÑ‚Ð°Ñ€Ñ‚");
-            System.out.println("   3) Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»ÑŒ: ÑÑ‚Ð¾Ð¿");
-            System.out.println("   4) ÐŸÐ¾ÐµÑ…Ð°Ñ‚ÑŒ/ÐŸÐ»Ñ‹Ñ‚ÑŒ/Ð›ÐµÑ‚ÐµÑ‚ÑŒ");
-            System.out.println("   0) ÐÐ°Ð·Ð°Ð´");
-            int c = readInt("Ð’Ñ‹Ð±Ð¾Ñ€: ");
+            System.out.println("  Действия:");
+            System.out.println("   1) Информация");
+            System.out.println("   2) Двигатель: старт");
+            System.out.println("   3) Двигатель: стоп");
+            System.out.println("   4) Поехать/Плыть/Лететь");
+            System.out.println("   0) Назад");
+            int c = readInt("Выбор: ");
             switch (c) {
                 case 1 -> System.out.println(t);
                 case 2 -> {
                     if (t instanceof EnginePowered ep) ep.startEngine();
-                    else System.out.println("Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»Ñ Ð½ÐµÑ‚.");
+                    else System.out.println("Двигателя нет.");
                 }
                 case 3 -> {
                     if (t instanceof EnginePowered ep) ep.stopEngine();
-                    else System.out.println("Ð”Ð²Ð¸Ð³Ð°Ñ‚ÐµÐ»Ñ Ð½ÐµÑ‚.");
+                    else System.out.println("Двигателя нет.");
                 }
                 case 4 -> t.move();
                 case 0 -> back = true;
-                default -> System.out.println("ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð°Ñ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð°");
+                default -> System.out.println("Неизвестная команда");
             }
         }
     }
 
-    // --------- Ð’ÑÐ¿Ð¾Ð¼Ð¾Ð³Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¼ÐµÑ‚Ð¾Ð´Ñ‹ Ð²Ð²Ð¾Ð´Ð° ---------
+    // --------- Вспомогательные методы ввода ---------
 
     private String readLine(String prompt) {
         System.out.print(prompt);
         String s = scanner.nextLine();
         while (s == null || s.isBlank()) {
-            System.out.print("ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€Ð¸Ñ‚Ðµ Ð²Ð²Ð¾Ð´: ");
+            System.out.print("Повторите ввод: ");
             s = scanner.nextLine();
         }
         return s.trim();
@@ -445,7 +445,7 @@ class ConsoleApp {
             try {
                 return Integer.parseInt(s.trim());
             } catch (Exception e) {
-                System.out.println("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ†ÐµÐ»Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾.");
+                System.out.println("Введите целое число.");
             }
         }
     }
@@ -454,7 +454,7 @@ class ConsoleApp {
         while (true) {
             int v = readInt(prompt + "[" + min + "-" + max + "]: ");
             if (v >= min && v <= max) return v;
-            System.out.println("Ð§Ð¸ÑÐ»Ð¾ Ð²Ð½Ðµ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°.");
+            System.out.println("Число вне диапазона.");
         }
     }
 
@@ -465,17 +465,17 @@ class ConsoleApp {
             try {
                 return Double.parseDouble(s.trim().replace(",", "."));
             } catch (Exception e) {
-                System.out.println("Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ‡Ð¸ÑÐ»Ð¾ (Ð¼Ð¾Ð¶Ð½Ð¾ Ñ Ñ‚Ð¾Ñ‡ÐºÐ¾Ð¹).");
+                System.out.println("Введите число (можно с точкой).");
             }
         }
     }
 
     private FuelType chooseFuel(List<FuelType> options) {
-        System.out.println("Ð¢Ð¸Ð¿ Ñ‚Ð¾Ð¿Ð»Ð¸Ð²Ð°:");
+        System.out.println("Тип топлива:");
         for (int i = 0; i < options.size(); i++) {
             System.out.printf("  %d) %s%n", i + 1, options.get(i));
         }
-        int idx = readIntWithin("Ð’Ñ‹Ð±Ð¾Ñ€: ", 1, options.size());
+        int idx = readIntWithin("Выбор: ", 1, options.size());
         return options.get(idx - 1);
     }
 }
