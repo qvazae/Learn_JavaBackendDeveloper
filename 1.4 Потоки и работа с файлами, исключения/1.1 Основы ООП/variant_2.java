@@ -1,4 +1,4 @@
-﻿?import java.io.File;
+﻿import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,7 +12,8 @@ public class variant_2 {
     private static final String CLASS_EXT = ".class";
 
     public static void main(String[] args) {
-    p    // ??????? ??? ?????? ?? ????????????? ????? ? ?????? ??????     p    try {
+    // Обёртка для защиты от некорректного ввода и ошибок логики
+    try {
         final boolean keepClasses = args != null && args.length > 0 && "--keep-classfiles".equals(args[0]);
 
         // Не было указано реализовать ввод векторов, заполняем тут
@@ -42,7 +43,9 @@ public class variant_2 {
         } else {
             System.out.println("[INFO] Классы сохранены (флаг --keep-classfiles).");
         }
-    p    } catch (Exception e) {     p        System.out.println("????????? ?????? ?????/??????: " + (e.getMessage() == null ? e.toString() : e.getMessage()));     p        // ??????????? ??????: ????????? ????????? ??? ???????     p    }
+    } catch (Exception e) {
+        System.out.println("Произошла ошибка ввода/логики: " + (e.getMessage() == null ? e.toString() : e.getMessage()));
+    }
     }
 
     private static void cleanupOwnClassFiles() {
