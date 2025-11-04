@@ -1,7 +1,0 @@
-﻿Ссылка на создание Pull Request (ветка exceptions -> main):
-https://github.com/qvazae/Learn_JavaBackendDeveloper/pull/new/exceptions
-
-Альтернативная ссылка сравнения (проверьте базовую ветку main):
-https://github.com/qvazae/Learn_JavaBackendDeveloper/compare/main...exceptions?expand=1
-
-Примечание: PR создаётся после нажатия кнопки на странице создания.
