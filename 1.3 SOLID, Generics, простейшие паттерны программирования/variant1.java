@@ -15,38 +15,7 @@ import java.util.*;
 
 public class variant1 {
     public static void main(String[] args) {
-        // Демонстрация: сборка транспорта через фабрики, хранение в репозитории, запуск движения
-        Repository<Transport> fleet = new InMemoryRepository<>();
-
-        TransportFactory<Car> carFactory = new CarFactory(
-                new RoadMovement<>(),
-                () -> new CombustionEngine(150, FuelType.GASOLINE)
-        );
-
-        TransportFactory<ElectricCar> evFactory = new ElectricCarFactory(
-                new RoadMovement<>(),
-                () -> new ElectricMotor(200, 75.0)
-        );
-
-        TransportFactory<Bicycle> bicycleFactory = new BicycleFactory(new RoadMovement<>());
-        TransportFactory<Airplane> airplaneFactory = new AirplaneFactory(new AirMovement<>(),
-                () -> new CombustionEngine(1200, FuelType.JET_FUEL));
-        TransportFactory<Ship> shipFactory = new ShipFactory(new WaterMovement<>(),
-                () -> new CombustionEngine(5000, FuelType.DIESEL));
-
-        fleet.save(carFactory.create("Toyota Camry", 5));
-        fleet.save(evFactory.create("Tesla Model 3", 5));
-        fleet.save(bicycleFactory.create("Trek Marlin 6", 1));
-        fleet.save(airplaneFactory.create("Boeing 737", 160));
-        fleet.save(shipFactory.create("MSC Seaside", 5000));
-
-        for (Transport t : fleet.findAll()) {
-            System.out.println(t);
-            if (t instanceof HasEngine<?> engineHolder) {
-                engineHolder.engine().start();
-            }
-            t.move();
-        }
+        new ConsoleApp().run();
     }
 }
 
@@ -342,5 +311,237 @@ final class ShipFactory implements TransportFactory<Ship> {
 
     @Override public Ship create(String model, int capacity) {
         return new Ship(model, capacity, movement, engineSupplier.get());
+    }
+}
+
+// ==========================
+//     Консольное приложение
+// ==========================
+
+/**
+ * Небольшое консольное приложение поверх доменной модели:
+ * - создаёт разные типы транспорта по вводу пользователя;
+ * - хранит их в репозитории в памяти;
+ * - позволяет запускать/останавливать двигатель (если он есть) и выполнять движение (Strategy).
+ *
+ * UI изолирован от домена: доменные классы не знают о консоли.
+ */
+final class ConsoleApp {
+    private final Scanner scanner = new Scanner(System.in);
+    private final Repository<Transport> fleet = new InMemoryRepository<>();
+
+    // Готовые стратегии движения — внедряются в транспорты
+    private final MovementStrategy<Car> roadCar = new RoadMovement<>();
+    private final MovementStrategy<ElectricCar> roadEv = new RoadMovement<>();
+    private final MovementStrategy<Bicycle> roadBike = new RoadMovement<>();
+    private final MovementStrategy<Airplane> air = new AirMovement<>();
+    private final MovementStrategy<Ship> water = new WaterMovement<>();
+
+    public void run() {
+        boolean exit = false;
+        while (!exit) {
+            System.out.println();
+            System.out.println("Меню:");
+            System.out.println(" 1) Создать автомобиль");
+            System.out.println(" 2) Создать самолёт");
+            System.out.println(" 3) Создать корабль");
+            System.out.println(" 4) Создать велосипед");
+            System.out.println(" 5) Создать электромобиль");
+            System.out.println(" 6) Список транспорта");
+            System.out.println(" 7) Операции с транспортом");
+            System.out.println(" 0) Выход");
+            int c = readInt("Выбор: ");
+            try {
+                switch (c) {
+                    case 1 -> createCar();
+                    case 2 -> createAirplane();
+                    case 3 -> createShip();
+                    case 4 -> createBicycle();
+                    case 5 -> createElectricCar();
+                    case 6 -> listFleet();
+                    case 7 -> operateTransport();
+                    case 0 -> exit = true;
+                    default -> System.out.println("Неизвестная команда");
+                }
+            } catch (Exception e) {
+                System.out.println("Ошибка: " + e.getMessage());
+            }
+        }
+    }
+
+    private void createCar() {
+        System.out.println("Создание автомобиля");
+        String model = readLine("Модель: ");
+        int cap = readIntNonNegative("Вместимость: ");
+        int hp = readIntPositive("Мощность двигателя (л.с.): ");
+        FuelType fuel = chooseFuel(List.of(FuelType.GASOLINE, FuelType.DIESEL));
+        int doors = readIntPositive("Количество дверей: ");
+        Car car = new Car(model, cap, roadCar, new CombustionEngine(hp, fuel), doors);
+        fleet.save(car);
+        System.out.println("Создано: " + car);
+    }
+
+    private void createAirplane() {
+        System.out.println("Создание самолёта");
+        String model = readLine("Модель: ");
+        int cap = readIntNonNegative("Вместимость: ");
+        int hp = readIntPositive("Мощность двигателя (л.с.): ");
+        Airplane airplane = new Airplane(model, cap, air, new CombustionEngine(hp, FuelType.JET_FUEL));
+        fleet.save(airplane);
+        System.out.println("Создано: " + airplane);
+    }
+
+    private void createShip() {
+        System.out.println("Создание корабля");
+        String model = readLine("Модель: ");
+        int cap = readIntNonNegative("Вместимость: ");
+        int hp = readIntPositive("Мощность двигателя (л.с.): ");
+        Ship ship = new Ship(model, cap, water, new CombustionEngine(hp, FuelType.DIESEL));
+        fleet.save(ship);
+        System.out.println("Создано: " + ship);
+    }
+
+    private void createBicycle() {
+        System.out.println("Создание велосипеда");
+        String model = readLine("Модель: ");
+        int cap = readIntWithin("Вместимость [1..4]: ", 1, 4);
+        int gears = readIntPositive("Число передач: ");
+        Bicycle bicycle = new Bicycle(model, cap, roadBike, gears);
+        fleet.save(bicycle);
+        System.out.println("Создано: " + bicycle);
+    }
+
+    private void createElectricCar() {
+        System.out.println("Создание электромобиля");
+        String model = readLine("Модель: ");
+        int cap = readIntNonNegative("Вместимость: ");
+        int hp = readIntPositive("Мощность электромотора (л.с.): ");
+        double kwh = readDoublePositive("Ёмкость батареи (кВт·ч): ");
+        ElectricCar ev = new ElectricCar(model, cap, roadEv, new ElectricMotor(hp, kwh));
+        fleet.save(ev);
+        System.out.println("Создано: " + ev);
+    }
+
+    private void listFleet() {
+        List<Transport> all = fleet.findAll();
+        if (all.isEmpty()) {
+            System.out.println("Парк пуст.");
+            return;
+        }
+        System.out.println("Содержимое парка:");
+        for (int i = 0; i < all.size(); i++) {
+            System.out.printf("%d) %s%n", i + 1, all.get(i));
+        }
+    }
+
+    private void operateTransport() {
+        List<Transport> all = fleet.findAll();
+        if (all.isEmpty()) {
+            System.out.println("Нечего выбирать — парк пуст.");
+            return;
+        }
+        listFleet();
+        int idx = readIntWithin("Выберите номер транспорта: ", 1, all.size()) - 1;
+        Transport t = all.get(idx);
+        System.out.println("Выбран: " + t);
+
+        boolean back = false;
+        while (!back) {
+            System.out.println("  Действия:");
+            System.out.println("   1) Информация");
+            System.out.println("   2) Запустить двигатель");
+            System.out.println("   3) Заглушить двигатель");
+            System.out.println("   4) Движение");
+            System.out.println("   0) Назад");
+            int c = readInt("Выбор: ");
+            switch (c) {
+                case 1 -> System.out.println(t);
+                case 2 -> {
+                    if (t instanceof HasEngine<?> he) {
+                        Engine e = ((HasEngine<?>) t).engine();
+                        if (!e.isRunning()) { e.start(); System.out.println("Двигатель запущен."); }
+                        else System.out.println("Двигатель уже работает.");
+                    } else System.out.println("Двигателя нет.");
+                }
+                case 3 -> {
+                    if (t instanceof HasEngine<?> he) {
+                        Engine e = ((HasEngine<?>) t).engine();
+                        if (e.isRunning()) { e.stop(); System.out.println("Двигатель остановлен."); }
+                        else System.out.println("Двигатель уже остановлен.");
+                    } else System.out.println("Двигателя нет.");
+                }
+                case 4 -> t.move();
+                case 0 -> back = true;
+                default -> System.out.println("Неизвестная команда");
+            }
+        }
+    }
+
+    // --------- Ввод с проверкой ---------
+
+    private String readLine(String prompt) {
+        System.out.print(prompt);
+        String s = scanner.nextLine();
+        while (s == null || s.isBlank()) {
+            System.out.print("Повторите ввод: ");
+            s = scanner.nextLine();
+        }
+        return s.trim();
+    }
+
+    private int readInt(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Введите целое число.");
+            }
+        }
+    }
+
+    private int readIntPositive(String prompt) {
+        while (true) {
+            int v = readInt(prompt);
+            if (v > 0) return v;
+            System.out.println("Число должно быть > 0.");
+        }
+    }
+
+    private int readIntNonNegative(String prompt) {
+        while (true) {
+            int v = readInt(prompt);
+            if (v >= 0) return v;
+            System.out.println("Число должно быть ≥ 0.");
+        }
+    }
+
+    private int readIntWithin(String prompt, int min, int max) {
+        while (true) {
+            int v = readInt(prompt);
+            if (v >= min && v <= max) return v;
+            System.out.printf("Введите число в диапазоне [%d..%d].%n", min, max);
+        }
+    }
+
+    private double readDoublePositive(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                String s = scanner.nextLine().trim().replace(',', '.');
+                double v = Double.parseDouble(s);
+                if (v > 0) return v;
+            } catch (Exception ignored) { }
+            System.out.println("Введите положительное число (дробная часть допустима).");
+        }
+    }
+
+    private FuelType chooseFuel(List<FuelType> options) {
+        System.out.println("Топливо:");
+        for (int i = 0; i < options.size(); i++) {
+            System.out.printf("  %d) %s%n", i + 1, options.get(i));
+        }
+        int idx = readIntWithin("Выбор: ", 1, options.size());
+        return options.get(idx - 1);
     }
 }
