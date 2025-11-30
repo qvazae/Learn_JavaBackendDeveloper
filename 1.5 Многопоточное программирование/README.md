@@ -1,5 +1,3 @@
-# Multithreaded Bank (Task 6)
-
 ## Что реализовано
 
 - Очередь транзакций (`LinkedBlockingQueue`) + несколько касс (`Thread`) обрабатывают операции асинхронно.
